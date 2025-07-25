@@ -73,11 +73,9 @@ UIState → View
   "timestamp": 1721841124,
   "description": "Monthly salary"
 }
-
+```
 🔒 Firestore Security Rules
-js
-Copy
-Edit
+```
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -89,6 +87,9 @@ service cloud.firestore {
     }
   }
 }
+
+```
+
 🧪 Test Cases
 ✅ Login and register
 
