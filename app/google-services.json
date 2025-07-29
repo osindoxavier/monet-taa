@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "884830859744",
+    "project_id": "money-taa",
+    "storage_bucket": "money-taa.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:884830859744:android:776fc8105c7cc239357b85",
+        "android_client_info": {
+          "package_name": "com.xavier.moneytaa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "884830859744-0eups94tt16o477042d1qhvrmpghhlfr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.xavier.moneytaa",
+            "certificate_hash": "6151b9994092b4950fc02df97aca1f331c751ed0"
+          }
+        },
+        {
+          "client_id": "884830859744-j4gqamdu3k4uv4ctrskl21ft94u11q22.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDj3RXUq7DfUdWonQV4Z93QXMAGpEkI9KQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "884830859744-j4gqamdu3k4uv4ctrskl21ft94u11q22.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
