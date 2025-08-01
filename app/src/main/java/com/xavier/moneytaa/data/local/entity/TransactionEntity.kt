@@ -2,13 +2,15 @@ package com.xavier.moneytaa.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.xavier.moneytaa.domain.model.transactions.SmsTransactionType
 
-@Entity(tableName = "app_transaction")
+@Entity(tableName = "sms_transactions")
 data class TransactionEntity(
-    @PrimaryKey val id: String,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
     val userId: String,
-    val type: String,
+    val type: SmsTransactionType,
     val amount: Double,
-    val description: String,
-    val timestamp: Long
+    val timestamp: Long,
+    val message: String
 )

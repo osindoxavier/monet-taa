@@ -125,11 +125,12 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
             is UIState.Success<String> -> {
                 Toast.makeText(context, "${uiState.data} signed in", Toast.LENGTH_SHORT).show()
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = { viewModel.onEvent(AuthEvent.Logout) }) {
-                    Text("Logout")
-                }
+//                Button(
+//                    modifier = Modifier.fillMaxWidth(),
+//                    onClick = { viewModel.onEvent(AuthEvent.Logout) }) {
+//                    Text("Logout")
+//                }
+                HomeScreen()
 
             }
         }

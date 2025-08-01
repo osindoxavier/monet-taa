@@ -18,8 +18,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object DatabaseModule {
-
+object AppModule {
 
 
     @Provides
@@ -56,6 +55,5 @@ object DatabaseModule {
             transactionDao = transactionDao
         )
     }
-
 
 }
