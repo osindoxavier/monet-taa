@@ -16,7 +16,11 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeTopApp(modifier: Modifier = Modifier) {
+fun HomeTopApp(
+    modifier: Modifier = Modifier,
+    onSyncClicked: () -> Unit,
+    onNotificationClicked: () -> Unit
+) {
     TopAppBar(
         modifier = modifier,
         title = {
@@ -25,7 +29,7 @@ fun HomeTopApp(modifier: Modifier = Modifier) {
         actions = {
             IconWithBadge(
                 onClick = {
-                    // Handle notification click
+                    onSyncClicked()
                 },
                 imageVector = Icons.Default.Sync,
                 description = "Sync Icon"
@@ -35,7 +39,7 @@ fun HomeTopApp(modifier: Modifier = Modifier) {
 
             IconWithBadge(
                 onClick = {
-                    // Handle notification click
+                    onNotificationClicked()
                 },
                 showBadge = true,
                 imageVector = Icons.Default.Notifications,

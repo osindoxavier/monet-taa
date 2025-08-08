@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -23,23 +22,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBalanceWallet
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowUpward
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.KeyboardDoubleArrowUp
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -60,33 +55,34 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
-import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.LazyPagingItems
 import com.xavier.moneytaa.data.local.entity.TransactionEntity
 import com.xavier.moneytaa.domain.model.transactions.SmsTransactionType
 import com.xavier.moneytaa.domain.model.transactions.TransactionTimeFilter
 import com.xavier.moneytaa.presentation.screens.composables.TransactionFilterDropdown
 import com.xavier.moneytaa.presentation.uiState.TransactionUiState
-import com.xavier.moneytaa.presentation.viewmodel.HomeViewModel
 import com.xavier.moneytaa.ui.theme.GradientEnd
 import com.xavier.moneytaa.ui.theme.GradientStart
 import com.xavier.moneytaa.utils.groupTitle
 import com.xavier.moneytaa.utils.toAmPmFormat
 import com.xavier.moneytaa.utils.truncateToTwoDecimalPlaces
-import java.nio.file.WatchEvent
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier, viewModel: HomeViewModel = hiltViewModel()
+    modifier: Modifier = Modifier,
+    parseAndSaveSmsMessages: () -> Unit,
+    uiState: TransactionUiState,
+    transactions: LazyPagingItems<TransactionEntity>,
+    onFilterChanged: (TransactionTimeFilter) -> Unit
+
 ) {
     val context = LocalContext.current
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(), onResult = { granted ->
             if (granted) {
-                viewModel.parseAndSaveSmsMessages()
+                parseAndSaveSmsMessages()
             } else {
                 Toast.makeText(context, "Permission denied", Toast.LENGTH_SHORT).show()
             }
@@ -97,14 +93,12 @@ fun HomeScreen(
                 context, Manifest.permission.READ_SMS
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            viewModel.parseAndSaveSmsMessages()
+            parseAndSaveSmsMessages()
         } else {
             permissionLauncher.launch(Manifest.permission.READ_SMS)
         }
     }
 
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val transactions = viewModel.transactions.collectAsLazyPagingItems()
 
     // Collect the current items as a list snapshot
     val items = transactions.itemSnapshotList.items
@@ -124,13 +118,11 @@ fun HomeScreen(
         }
         groupedList
     }
-
-
     LazyColumn(modifier = modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp)) {
         item {
             BalanceCard(
                 uiState = uiState,
-                onFilterSelected = viewModel::onFilterChanged,
+                onFilterSelected = onFilterChanged,
             )
         }
         item {

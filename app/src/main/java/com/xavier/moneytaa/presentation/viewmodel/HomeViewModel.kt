@@ -9,6 +9,7 @@ import com.xavier.moneytaa.domain.repository.AuthRepository
 import com.xavier.moneytaa.domain.repository.SmsParserRepository
 import com.xavier.moneytaa.domain.repository.TransactionRepository
 import com.xavier.moneytaa.presentation.uiState.TransactionUiState
+import com.xavier.moneytaa.presentation.uiState.UIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -89,6 +90,14 @@ class HomeViewModel @Inject constructor(
 
     companion object {
         private const val TAG = "HomeViewModel"
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+//            updateUiState(UIState.Loading)
+            authRepository.signOut()
+//            resetState()
+        }
     }
 
 

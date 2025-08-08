@@ -6,11 +6,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.xavier.moneytaa.data.validator.AuthValidator
+import com.xavier.moneytaa.domain.validator.AuthValidator
 import com.xavier.moneytaa.domain.model.authentication.AuthResponse
 import com.xavier.moneytaa.domain.repository.AuthRepository
 import com.xavier.moneytaa.presentation.event.AuthEvent
-import com.xavier.moneytaa.presentation.uiState.LoginStateForm
+import com.xavier.moneytaa.presentation.uiState.AuthStateForm
 import com.xavier.moneytaa.presentation.uiState.UIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,7 +25,7 @@ class AuthenticationViewModel @Inject constructor(
     private val authValidator: AuthValidator
 ) : ViewModel() {
 
-    var state by mutableStateOf(LoginStateForm())
+    var state by mutableStateOf(AuthStateForm())
 
     private val _uiState = MutableStateFlow<UIState<String>>(UIState.Idle)
     val uiState: StateFlow<UIState<String>> = _uiState.asStateFlow()
@@ -68,11 +68,20 @@ class AuthenticationViewModel @Inject constructor(
                 )
             }
 
-            is AuthEvent.LoginWithEmail -> validateUserInput()
+            is AuthEvent.RepeatPasswordChanged -> {
+                state = state.copy(
+                    repeatPassword = event.password, repeatPasswordError = null
+                )
+            }
+
+
+            is AuthEvent.SignIn -> validateUserInput()
             is AuthEvent.LoginWithGoogle -> loginWithGoogle()
             is AuthEvent.Logout -> logout()
+            AuthEvent.CreateAccount -> validateCreateAccountInputs()
         }
     }
+
 
     private fun validateUserInput() {
         val emailResult = authValidator.executeEmail(state.email)
@@ -113,7 +122,33 @@ class AuthenticationViewModel @Inject constructor(
         }
     }
 
-    private fun createAccount(email: String, password: String){
+    private fun validateCreateAccountInputs() {
+        val emailResult = authValidator.executeEmail(state.email)
+        val passwordResult = authValidator.executePassword(state.password)
+        val repeatPasswordResult = authValidator.executeRepeatPassword(
+            password = state.password,
+            repeatPassword = state.repeatPassword
+        )
+
+        val hasError = listOf(
+            emailResult, passwordResult, repeatPasswordResult
+        ).any { !it.successful }
+
+        if (hasError) {
+            state = state.copy(
+                emailError = emailResult.errorMessage,
+                passwordError = passwordResult.errorMessage,
+                repeatPasswordError = repeatPasswordResult.errorMessage
+            )
+            return
+        }
+
+        viewModelScope.launch {
+            createAccount(email = state.email, password = state.password)
+        }
+    }
+
+    private fun createAccount(email: String, password: String) {
         _uiState.value = UIState.Loading
         viewModelScope.launch {
             authRepository.createAccountWithEmail(email, password).collect { response ->
@@ -152,7 +187,6 @@ class AuthenticationViewModel @Inject constructor(
             }
         }
     }
-
 
 
     fun resetState() {

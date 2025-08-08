@@ -4,9 +4,9 @@ import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.xavier.moneytaa.data.local.dao.UserDao
 import com.xavier.moneytaa.data.repository.AuthRepositoryImpl
-import com.xavier.moneytaa.data.validator.AuthValidator
+import com.xavier.moneytaa.domain.validator.AuthValidator
 import com.xavier.moneytaa.domain.repository.AuthRepository
-import com.xavier.moneytaa.domain.validator.AuthValidatorImpl
+import com.xavier.moneytaa.data.validator.AuthValidatorImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
