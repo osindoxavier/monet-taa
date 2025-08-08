@@ -22,7 +22,7 @@ class SmsParserRepositoryImpl @Inject constructor(
         "credited", "debited", "was credited", "was debited",
         "has been credited", "has been debited",
         "credit has been made", "debit has been made",
-        "a credit has been made", "a debit has been made"
+        "a credit has been made", "a debit has been made", "give ksh"
     )
 
 
@@ -63,39 +63,6 @@ class SmsParserRepositoryImpl @Inject constructor(
             Log.d(TAG, "parseAndSaveSmsMessages: Saving remaining ${batch.size} transactions")
             transactionDao.insertAllTransactions(batch.map { it.toEntity() })
         }
-
-//        readSmsFromInboxSequence()
-//            .filter { sms ->
-//                transactionKeywords.any { keyword ->
-//                    sms.body.contains(keyword, ignoreCase = true)
-//                }
-//            }
-//            .forEach { sms ->
-//                val type = detectTransactionType(sms.body)
-//                val amount = extractAmount(sms.body)
-//
-//                if (type != SmsTransactionType.UNKNOWN && amount != null) {
-//                    batch += SmsTransaction(
-//                        userId = userId,
-//                        transactionType = type,
-//                        amount = amount,
-//                        source = sms.address,
-//                        timestamp = sms.timestamp,
-//                        message = sms.body
-//                    )
-//
-//                    if (batch.size >= 20) {
-//                        transactionDao.insertAllTransactions(batch.map { it.toEntity() })
-//                        batch.clear()
-//                    }
-//                }
-//            }
-//
-//        // ✅ Insert any remaining transactions after the loop
-//        if (batch.isNotEmpty()) {
-//
-//            transactionDao.insertAllTransactions(batch.map { it.toEntity() })
-//        }
     }
 
     private fun readSmsFromInboxSequence(): Sequence<SmsMessageData> = sequence {
@@ -131,7 +98,8 @@ class SmsParserRepositoryImpl @Inject constructor(
             "payment received",
             "received from",
             "deposit",
-            "deposited"
+            "deposited",
+            "give ksh"
         )
 
         val debitIndicators = listOf(

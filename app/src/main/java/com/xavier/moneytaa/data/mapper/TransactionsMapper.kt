@@ -10,7 +10,8 @@ fun SmsTransaction.toEntity(): TransactionEntity {
         type = transactionType,
         amount = amount,
         message = message,
-        timestamp = this.timestamp
+        timestamp = this.timestamp,
+        source = this.source
 
     )
 }
@@ -21,7 +22,7 @@ fun TransactionEntity.toSmsTransaction(): SmsTransaction {
         userId = userId,
         transactionType = type,
         amount = amount,
-        source = null,
+        source = source,
         message = message,
         timestamp = timestamp
     )

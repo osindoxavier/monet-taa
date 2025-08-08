@@ -1,6 +1,5 @@
 package com.xavier.moneytaa.presentation.screens
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -27,7 +26,7 @@ import com.xavier.moneytaa.presentation.uiState.UIState
 import com.xavier.moneytaa.presentation.viewmodel.AuthenticationViewModel
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier) {
+fun SignInScreen(modifier: Modifier = Modifier, onLoginSuccess: () -> Unit) {
     val viewModel: AuthenticationViewModel = hiltViewModel()
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val context = LocalContext.current
@@ -124,13 +123,8 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             }
 
             is UIState.Success<String> -> {
-                Toast.makeText(context, "${uiState.data} signed in", Toast.LENGTH_SHORT).show()
-//                Button(
-//                    modifier = Modifier.fillMaxWidth(),
-//                    onClick = { viewModel.onEvent(AuthEvent.Logout) }) {
-//                    Text("Logout")
-//                }
-                HomeScreen()
+//                Toast.makeText(context, "Signed in as ${uiState.data} signed in", Toast.LENGTH_SHORT).show()
+                onLoginSuccess()
 
             }
         }

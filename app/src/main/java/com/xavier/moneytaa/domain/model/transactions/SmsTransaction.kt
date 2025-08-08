@@ -7,7 +7,7 @@ data class SmsTransaction(
     val userId: String,
     val transactionType: SmsTransactionType,
     val amount: Double,
-    val source: String?,
+    val source: String,
     val message: String,
     val timestamp: Long
 )

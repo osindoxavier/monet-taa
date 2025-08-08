@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias (libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -91,4 +92,20 @@ dependencies {
     implementation(libs.room.paging)
     implementation(libs.paging.runtime)
     implementation(libs.paging.compose)
+
+    implementation(libs.google.fonts)
+
+    implementation(libs.androidx.core)
+
+    implementation(libs.material.icons)
+
+    implementation(libs.kotlinx.serialization.json)
+
+    implementation(libs.androidx.compose.animation.graphics)
+
+    implementation(libs.navigation)
+
+    implementation(libs.androidx.core.splashscreen)
+
+    implementation(kotlin("reflect"))
 }
